@@ -19,7 +19,7 @@ $ brightness -help
 # installation 
 - clone the repo 
 ```bash 
-git clone 
+git clone https://github.com/Onizuka09/Birghtness_contorl.git 
 ```
 - run the install script 
 
