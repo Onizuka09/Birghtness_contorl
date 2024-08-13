@@ -1,0 +1,117 @@
+#!/bin/bash 
+max_bright_f="/sys/class/backlight/intel_backlight/max_brightness"
+bright_f="/sys/class/backlight/intel_backlight/brightness"
+
+
+
+help_light(){ 
+echo "A tool that helps you controll the brightness of your screen backlight"
+printf "Usage: brightness options <value> \n\r"
+echo "available options: "
+printf "  -I | -i           : increase the level by 10%%   \n" 
+printf "  -D | -d           : decreases the level by 10%%  \n"
+printf "  -U | -u <val>     : increases the level by <val> \n"  
+printf "  -L | -l <val>     : increases the level by <val> \n"
+printf "  -R | -r           : returns the birghtness level \n" 
+printf "  -h | --help       : help \n" 
+
+}
+# function to do the calculation and returns the result 
+# takes as argument 
+# 1: max_bright
+# 2: curr_bright
+# 3: operation
+calcul_percent(){
+max_v=$1
+curr_v=$2
+op=$3
+declare -i perc=$max_v/10 
+#echo $perc 
+case $op in 
+  I)
+    declare -i newV=$curr_v+$perc
+    ;;
+  D)
+    declare -i newV=$curr_v-$perc
+    ;;
+  ?)
+    echo "Error operation"
+    exit 1
+    ;;
+esac
+echo $newV
+  }
+# function that updates the brightness 
+# takes 1 argument  
+# 1: value to update  
+update_bright(){
+value=$1
+echo "updating ..."
+echo $value >| $bright_f
+
+}
+#function that reads the current brightness value 
+# return curr_v 
+read_curr_brightness_val(){
+
+read curr_bright < $bright_f
+echo $curr_bright
+}
+# function that increases the brightness value 
+increase_brightness(){
+read max_bright < $max_bright_f
+curr_bright=$(read_curr_brightness_val)
+newV=$(calcul_percent $max_bright $curr_bright "I")
+echo $max_bright
+#curr_bright=855
+echo $curr_bright
+echo $newV
+if [[ $newV -gt $max_bright ]];then
+  echo "Brightness at max value $newV"
+else 
+  echo "Brightness: $newV"
+  update_bright $newV
+fi
+}
+# function that decreases the brightness value 
+decrease_brightness(){
+read max_bright < $max_bright_f
+
+curr_bright=$(read_curr_brightness_val)
+
+newV=$(calcul_percent $max_bright $curr_bright "D")
+echo $max_bright
+#curr_bright=855
+echo $curr_bright
+echo $newV
+if [[ $newV -lt 100 ]];then
+  echo "Brightness at min value $newV"
+  else 
+  echo "Brightness: $newV"
+  update_bright $newV
+fi
+}
+if [ "$0" = "$BASH_SOURCE" ] ; then
+  OPTSTRING=":IDh"
+  while getopts ${OPTSTRING} opt; do
+    case ${opt} in
+      I)
+        increase_brightness
+        #echo "Option -I was triggered."
+        ;;
+      D)
+        decrease_brightness
+        #echo "Option -D was triggered."
+        ;;
+      h)
+        help_light
+        ;;
+      ?)
+        echo "Invalid option: -${OPTARG}."
+        echo "please run brightness -h to see available options"
+        exit 1
+        ;;
+    esac
+  done
+fi
+
