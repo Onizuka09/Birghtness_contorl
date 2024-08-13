@@ -7,7 +7,7 @@ By changing the value under `brightness` file i can change the screen brightnes.
 So i wrote a shell script that manipulates `brightness` and handles the user arguments.
 ### usage 
 ```bash 
-$ brightness -help
+$ brightness --help
 -I | -i         : increase the level by 10% 
 -D | -d         : decreases the level by 10% 
 -U | -u <val>   : increases the level by <val>  
@@ -29,7 +29,7 @@ git clone https://github.com/Onizuka09/Birghtness_contorl.git
 
 ## TODo:
 
--[x] process args <br>
+-[o] process args (not all)<br>
 -[x] Increase by 10%  
 -[x] decrease by 10%  
 -[x] help menu  
