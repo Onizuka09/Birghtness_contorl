@@ -1,33 +1,15 @@
 #!/bin/bash 
-# store the paths 
-paths=$(find /sys/class/backlight)
-# convert it to an array 
-p_arr=($paths)
-#
-# p_arr=(mok ham aaeai)
-size_arr=${#p_arr[@]}
-if [[ size_arr -gt 2 ]];then 
-echo $size_arr
-echo "you have these paths selct which one of them"
-for ((i=1; i<$size_arr; i++));do 
-  echo ${p_arr[i]}
-done
-mypath="none"
-else 
-mypath=${p_arr[1]}
-fi 
 
+BL_TEST_DENRTY="/sys/class/backlight/intel_backlight"
+BL_DENTRY="${BL_BASE_DIR:-$BL_TEST_DENRTY}"
+#BL_DENTRY="${BL_BASE_DIR}/intel_backlight"
+BR_INST_PATH="${BL_INST_PATH:-/usr/bin/}"
 
-echo "you have chosen" 
-echo $mypath
-# the brightness path is 
-b_p="${mypath}/brightness"
-mb_p="${mypath}/max_brightness"
+BR_SCRIPT="brightness_control.sh"
+#echo $BL_DENTRY
+sed -i "s|${BL_TEST_DENRTY}|${BL_DENTRY}|" $BR_SCRIPT 
 
-echo $b_p
-echo $mb_p
+echo "Installing ${BR_INST_PATH} ..."
+cp -v $BR_SCRIPT $BR_INST_PATH
 
-cat $b_p
-
-cat $mb_p
-
+echo "done !"
