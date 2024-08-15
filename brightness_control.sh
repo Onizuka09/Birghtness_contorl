@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Base directory for the Linux's sysfs backlight class
-BL_BASE_DIR="${BL_BASE_DIR:-/sys/class/backlight}"
-BL_DENTRY="${BL_BASE_DIR}/intel_backlight"
+#BL_BASE_DIR="${BL_BASE_DIR:-/sys/class/backlight}"
+
+BL_DENTRY="/sys/class/backlight/intel_backlight"
 BL_MAX_BR="${BL_DENTRY}/max_brightness"
 BL_CURR_BR="${BL_DENTRY}/brightness"
 
@@ -27,6 +28,21 @@ usage(){
       -h | --help       : help"
 }
 
+do_read_brightness(){
+
+  local BR_VAL_PERC=$(( ($BL_CURR_BR_VAL * 100) / $BL_MAX_BR_VAL))
+  echo "${BR_VAL_PERC}%"
+}
+do_update_brightness_by_val(){
+ local tmpV=$BL_10PERC
+ local op=${1}
+ local val=${2}
+#  echo $val
+ BL_10PERC=$(( ($val * $BL_MAX_BR_VAL) / 100 ))
+ do_update_brightness ${1}
+ BL_10PERC=$tmpV
+
+}
 do_update_brightness(){
   # This should be true or false
   local operation=${1}
@@ -48,11 +64,14 @@ do_update_brightness(){
 }
 
 do_main(){
-  OPTSTRING=":IDh"
+  OPTSTRING=":IDRhU:L:"
   while getopts ${OPTSTRING} opt; do
     case ${opt} in
       I) do_update_brightness true;;
       D) do_update_brightness false;;
+      R) do_read_brightness ;;
+      U) do_update_brightness_by_val true ${OPTARG};;
+      L) do_update_brightness_by_val false ${OPTARG} ;;
       h) usage ;;
       ?)
         echo "Invalid option: -${OPTARG}."
