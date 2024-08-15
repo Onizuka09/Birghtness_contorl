@@ -10,8 +10,8 @@ So i wrote a shell script that manipulates `brightness` and handles the user arg
 $ brightness --help
 -I | -i         : increase the level by 10% 
 -D | -d         : decreases the level by 10% 
--U | -u <val>   : increases the level by <val>  
--L | -l <val>   : increases the level by <val>
+-U | -u <val>   : increases the level by <val>% 
+-L | -l <val>   : increases the level by <val>%
 -R | -r         : returns the birghtness level 
 -h | --help     : help 
 ```
@@ -21,22 +21,30 @@ $ brightness --help
 ```bash 
 git clone https://github.com/Onizuka09/Birghtness_contorl.git 
 ```
-- run the install script 
 
+By default the script assumes that the backlight driver is `intel_backlight` and its located under `/sys/class/backlight`.<br> 
+To update this path you this variable: 
 ```bash 
-./install.sh 
+export BL_BASE_DIR="YOU_PATH_BACKLIGHT"
+```
+- run the install script 
+You can set an installation PATh also default `/usr/bin/`
+```bash 
+# optional 
+export BL_INST_PATH="YOUR_PATh"
+# to install 
+sudo ./install.sh 
 ```
 
 ## TODo:
 
--[o] process args (not all)<br>
+-[x] process args (not all)<br>
 -[x] Increase by 10%  
 -[x] decrease by 10%  
 -[x] help menu  
--[ ] create a function that automatically seacrches for the backlight driver on the system and returns the path.<br>
--[ ] create an install script<br>
--[ ] Read value and convert it to percentage  
--[ ] Increase by val  
--[ ] decrease by val<br>
+-[x] create an install script<br>
+-[x] Read value and convert it to percentage  
+-[x] Increase by val  
+-[x] decrease by val<br>
 -[ ] control other screens backlight 
 
