@@ -1,4 +1,4 @@
-# Brightness  
+# Brightness_control  
 This is a command line tool to control the brightness level of the screen. 
 inspired by the light command-line
 # How does it work 
@@ -7,13 +7,14 @@ By changing the value under `brightness` file i can change the screen brightnes.
 So i wrote a shell script that manipulates `brightness` and handles the user arguments.
 ### usage 
 ```bash 
-$ brightness --help
--I | -i         : increase the level by 10% 
--D | -d         : decreases the level by 10% 
--U | -u <val>   : increases the level by <val>% 
--L | -l <val>   : increases the level by <val>%
--R | -r         : returns the birghtness level 
--h | --help     : help 
+$ Brightness_control --help
+-I | -increase          : increase the level by 10% 
+-D | --decrease         : decreases the level by 10% 
+-U | --upper <val>      : increases the level by <val> in % 
+-L | --lower <val>      : increases the level by <val> in %
+-R | --read             : returns the birghtness level 
+-h | --help             : help 
+-v | --version          : version 
 ```
 
 # installation 
@@ -38,7 +39,8 @@ sudo ./install.sh
 
 ## TODo:
 
--[x] process args (not all)<br>
+-[x] process args<br>
+-[ ] args error handling
 -[x] Increase by 10%  
 -[x] decrease by 10%  
 -[x] help menu  
