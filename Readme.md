@@ -26,7 +26,7 @@ git clone https://github.com/Onizuka09/Birghtness_contorl.git
 By default the script assumes that the backlight driver is `intel_backlight` and its located under `/sys/class/backlight`.<br> 
 To update this path you this variable: 
 ```bash 
-export BL_BASE_DIR="YOU_PATH_BACKLIGHT"
+export BL_INSTALL_PATH="YOU_PATH_BACKLIGHT"
 ```
 - run the install script 
 You can set an installation PATh also default `/usr/bin/`
