@@ -20,12 +20,13 @@ usage(){
     " A tool that helps you controll the brightness of your screen backlight.
       Usage: <option> <value>
       Available options:
-      -I | -i           : increase the level by 10%
-      -D | -d           : decreases the level by 10%   
-      -U | -u <val>     : increases the level by <val>
-      -L | -l <val>     : increases the level by <val>
-      -R | -r           : returns the birghtness level
-      -h | --help       : help"
+      -I | --increase           : increase the level by 10%
+      -D | --decrease           : decreases the level by 10%   
+      -U | --upper <val>       : increases the level by <val> in %
+      -L | --lower  <val>       : increases the level by <val> in %
+      -R | --read               : returns the birghtness level
+      -h | --help               : help
+      -v | --version            : version "
 }
 
 do_read_brightness(){
@@ -64,26 +65,26 @@ do_update_brightness(){
 }
 
 do_main(){
-  OPTSTRING=":IDRhU:L:"
-  while getopts ${OPTSTRING} opt; do
-    case ${opt} in
-      I) do_update_brightness true;;
-      D) do_update_brightness false;;
-      R) do_read_brightness ;;
-      U) do_update_brightness_by_val true ${OPTARG};;
-      L) do_update_brightness_by_val false ${OPTARG} ;;
-      h) usage ;;
-      ?)
-        echo "Invalid option: -${OPTARG}."
-        usage
-        exit 1
-        ;;
+  OPTSTRING="IDRhU:L:"
+options=$(getopt -l "help,version,increase,decrease,read,upper:,lower:" -o "hvIDRU:L:" -a -- "$@")
+eval set -- "$options"
+while true; do
+    case "$1" in
+      -I|--increase) do_update_brightness true; shift ;;
+      -D|--decrease) do_update_brightness false; shift ;;
+      -R|--read) do_read_brightness; shift ;;
+      -U|--upper) do_update_brightness_by_val true "$2"; shift 2 ;;
+      -L|--lower) do_update_brightness_by_val false "$2"; shift 2 ;;
+      -h|--help) usage; exit 0 ;;
+      -v|--version) echo "Version: 1.0"; shift  ;;
+      --) shift; break ;;
+      *) echo "Invalid option: $1"; usage; exit 1 ;;
     esac
   done
 }
 
 # Make sure the file is being executed and not sourced
 if [ "$0" = "$BASH_SOURCE" ] ; then
-  [ ${#} -eq 0 ] && usage && exit 1
+  [ ${#} -eq 0 ] || [ ${#} -gt 2 ]&& usage && exit 1
   do_main $@
 fi
